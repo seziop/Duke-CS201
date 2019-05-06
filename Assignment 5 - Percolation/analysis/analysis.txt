@@ -1,0 +1,125 @@
+Shivansh S. Mehta
+sm682
+
+Q1. Copy/Paste from running PercolationStats with these grid sizes:
+grid sizes of 100, 200, 400, 800, 1600, and 3200
+and using 20 trials
+
+PercolationDFSFast
+
+    grid    mean    stddev  total time
+    100	    0.593   0.014   0.096
+    200	    0.591   0.010   0.173
+    400	    0.590   0.006   0.881
+    800	    0.594   0.004   4.747
+    Exception in thread "main" java.lang.StackOverflowError
+
+PercolationBFS
+
+    grid    mean    stddev  total time
+    100	    0.593   0.014   0.153
+    200	    0.591   0.010   0.186
+    400	    0.590   0.006   1.056
+    800	    0.594   0.004   5.207
+    1600    0.592   0.002   28.435
+    3200    0.593   0.001   157.575
+
+PercolationUF with QuickUWPC
+
+    grid    mean    stddev  total time
+    100     0.593   0.014   0.078
+    200	    0.591   0.010   0.137
+    400	    0.590   0.006   0.793
+    800	    0.594   0.004   3.619
+    1600    0.592   0.002   19.902
+    3200    0.593   0.001   101.161
+
+----------------------------------------
+
+Answer these questions for PercolateUF with a QuickUWPC union-find object
+
+Q2. How does doubling the grid size affect running time (keeping # trials fixed)
+
+    The Results for percolationUF with increasing grid size is reproduced below:
+
+    grid    mean    stddev  total time
+    100     0.593   0.014   0.078
+    200	    0.591   0.010   0.137
+    400	    0.590   0.006   0.793
+    800	    0.594   0.004   3.619
+    1600    0.592   0.002   19.902
+    3200    0.593   0.001   101.161
+
+    When the grid size increases from 100 to 200, total time increases from
+    0.078 to 0.137, which is a 76% increase in time taken. Similarly continuing to
+    double the grid size results in increases of 479%, 356%, 450% and 408%
+    respectively with each iteration. While a specific trend-line could
+    be derived either theoretically (using big oh) or by continuing to project
+    data points, it can be concluded that with increasing grid size, the time
+    taken increases.
+
+    This makes conceptual sense as we previously defined the percolation threshold
+    as when N^2*p are randomly opened and if our grid size (N*N) increases,
+    our threshold increases.
+
+----------------------------------------
+
+
+Q3. How does doubling the number of trials affect running time.
+
+    To begin, I tweaked the percolationStats file to include a nested loop that iterates
+    over trials from 20 to 320. For the sake of time and the fact that the system takes
+    a largely fixed amt of time (setting up variables etc) at lower grid sizes,
+    I also just limited my analysis to 400 and 800 grid sizes
+
+    --simulation data for 20 trials--
+    grid	mean	stddev	total time
+    400	    0.591	0.005	0.726
+    800	    0.593	0.004	3.644
+
+    --simulation data for 40 trials--
+    grid	mean	stddev	total time
+    400	    0.593	0.006	0.985
+    800	    0.593	0.004	5.815
+
+    --simulation data for 80 trials--
+    grid	mean	stddev	total time
+    400	    0.593	0.005	1.917
+    800	    0.594	0.004	11.283
+
+    --simulation data for 160 trials--
+    grid	mean	stddev	total time
+    400	    0.593	0.006	3.485
+    800	    0.593	0.004	21.853
+
+    --simulation data for 320 trials--
+    grid	mean	stddev	total time
+    400	    0.593	0.006	7.351
+    800	    0.593	0.003	43.618
+
+    As can be seen, our total time increases with number of trials. When grid size is
+    400, our approximate total time for trials is 1,2,4 and 8. Similarly for 800 size,
+    our time varies 6,12,22,44. Thus doubling the trials seems to also approximately
+    double total time when compared with fixed grid size.
+
+----------------------------------------
+
+
+Q4. Estimate the largest grid size you can run in 24 hours with 20 trials. Explain your reasoning.
+
+    Okay, so my percolationUF with 20 trials and 3200 grid size took approximately 101.161s.
+    The general rate of increase with doubled grid size seems was (479%, 356%, 450%, 408%), so
+    we see it somewhat settling at a factor of 4.5x with doubled grid size. Note, there are 86400
+    seconds in a day so im gonna do all my calculations in time seconds.
+
+    - Time when Grid Size is 3200 = 101.161
+    - Time when Grid Size is ? = 86400
+    - Factor of 4.5x with 2x grid increase
+
+    Thus    101.161 * 4.5^x <= 86400
+            4.5^x <= 854.1
+            x <= 4
+
+    If we take that as 4. That means its 4 iterations greater than 3200.
+
+    Therefore largest size is  3200 * (2)^4 = 51,200 grid size which will run within 24 hrs.
