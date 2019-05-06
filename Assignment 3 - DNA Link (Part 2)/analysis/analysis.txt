@@ -1,0 +1,144 @@
+Oliver Rodas
+oar5
+Shivansh Mehta
+sm682
+
+BE SURE TO READ This document which has detailed diagrams: http://bit.ly/201spring19-dna-analysis
+
+In answering these questions you should refer to the timings you generated from the 
+DNABenchmark program on your machine. Use these timings to answer three questions.
+
+The first two questions can be answered before coding and must be answered, 
+pushed to Git and Gradescope, before spring break starts.
+
+______(part one)____________
+
+Question 1: are the benchmark timings for StringStrand consistent with the explanation 
+below that the time to execute cutAndSplice is O(b^2S)?
+
+Note that the value of b is half the number of calls to append since each cut (except the first) 
+is modeled by two calls of append in the method cutAndSplice -- see the code. 
+This means that b2 will be constant in the benchmark, but S will vary.
+
+    A program of time complexity O(b^2S), when b (the occurances of an enzyme)
+    remains constant, suggests that as S (Splicee length) varies, the resultant
+    time should also vary proportionally.
+
+    Let us now look at our benchmark results:
+
+    dna length = 4,639,221
+    cutting at enzyme gaattc
+    -----
+    Class	                splicee	      recomb	time	appends
+    -----
+    StringStrand:	            256	      4,800,471	0.665	1290
+    StringStrand:	            512	      4,965,591	0.798	1290
+    StringStrand:	          1,024	      5,295,831	0.771	1290
+    StringStrand:	          2,048	      5,956,311	0.816	1290
+    StringStrand:	          4,096	      7,277,271	1.180	1290
+    StringStrand:	          8,192	      9,919,191	1.490	1290
+    StringStrand:	         16,384	     15,203,031	2.470	1290
+    StringStrand:	         32,768	     25,770,711	4.345	1290
+    StringStrand:	         65,536	     46,906,071	8.563	1290
+    StringStrand:	        131,072	     89,176,791	19.998	1290
+    StringStrand:	        262,144	    173,718,231	40.527	1290
+    StringStrand:	        524,288	    342,801,111	66.680	1290
+    StringStrand:	      1,048,576	    680,966,871	121.062	1290
+
+    At first, when S is doubled from 256 to 512 or from 512 to 1024,
+    our run time does not proportionally increase or decreases respectively.
+    However, when we start looking at sizes 16,384 onwards, the time
+    starts to follow a linear progression whereby doubling splicee causes
+    a doubled run time.
+
+    I believe the initial inconsistency could be because the computer takes
+    a certain amount of time to initially run through the program regardless of
+    Splicee size. Our general O notation captures the essence, especially
+    at higher sizes, but cannot perfectly model it at smaller increments.
+
+    Hence when b is kept constant and a certain splicee size threshold is
+    achieved, StringStrand seems to behave with O(b^2S) complexity.
+
+______(part one)____________
+
+Question 2: are the benchmark timings for StringBuilderStrand consistent with the 
+explanation below that the time to execute cutAndSplice is O(bS)? 
+
+Note that the value of b is half the number of calls to append since each cut (except the first) 
+is modeled by two calls of append in the method cutAndSplice -- see the code.
+This means that b will be constant in the benchmark, but S will vary.
+
+    dna length = 4,639,221
+    cutting at enzyme gaattc
+    -----
+    Class	                splicee	      recomb	time	appends
+    -----
+    StringBuilderStrand:	            256	      4,800,471	0.029	1290
+    StringBuilderStrand:	            512	      4,965,591	0.021	1290
+    StringBuilderStrand:	          1,024	      5,295,831	0.009	1290
+    StringBuilderStrand:	          2,048	      5,956,311	0.009	1290
+    StringBuilderStrand:	          4,096	      7,277,271	0.008	1290
+    StringBuilderStrand:	          8,192	      9,919,191	0.011	1290
+    StringBuilderStrand:	         16,384	     15,203,031	0.015	1290
+    StringBuilderStrand:	         32,768	     25,770,711	0.029	1290
+    StringBuilderStrand:	         65,536	     46,906,071	0.045	1290
+    StringBuilderStrand:	        131,072	     89,176,791	0.114	1290
+    StringBuilderStrand:	        262,144	    173,718,2310.172	1290
+    StringBuilderStrand:	        524,288	    342,801,111	0.360	1290
+
+    The timing is not consistent at first as the runtime does not double when the splice size
+    is doubled. However, at a splice size of 16,384, the benchmark begins to behave as a linear
+    function of s. This is seen when going from 16000 to 32000, the runtime goes from 0.011 to
+    0.023. Doubling the splice size doubles the runtime. This trend continues past this splice
+    size and the runtime is consistent with the stated O(bS), where b is held constant.
+
+______(part two)____________
+
+Question 3: Explain why the time for LinkStrand does not change much at all over all 
+the runs in the benchmark program. Explain why you think memory is exhausted at 
+the specific strand size you see in your timings -- as compared to 
+exhaustion for String and StringBuilder.
+
+	dna length = 4,639,221
+	cutting at enzyme gaattc
+	-----
+	Class	                splicee	      recomb	time	appends
+	-----
+	LinkStrand:	            256	      4,800,471	0.030	1290
+	LinkStrand:	            512	      4,965,591	0.028	1290
+	LinkStrand:	          1,024	      5,295,831	0.005	1290
+	LinkStrand:	          2,048	      5,956,311	0.005	1290
+	LinkStrand:	          4,096	      7,277,271	0.005	1290
+	LinkStrand:	          8,192	      9,919,191	0.013	1290
+	LinkStrand:	         16,384	     15,203,031	0.004	1290
+	LinkStrand:	         32,768	     25,770,711	0.004	1290
+	LinkStrand:	         65,536	     46,906,071	0.005	1290
+	LinkStrand:	        131,072	     89,176,791	0.004	1290
+	LinkStrand:	        262,144	    173,718,231	0.004	1290
+	LinkStrand:	        524,288	    342,801,111	0.003	1290
+	LinkStrand:	      1,048,576	    680,966,871	0.006	1290
+	LinkStrand:	      2,097,152	  1,357,298,391	0.004	1290
+	LinkStrand:	      4,194,304	  2,709,961,431	0.006	1290
+	LinkStrand:	      8,388,608	  5,415,287,511	0.004	1290
+	LinkStrand:	     16,777,216	 10,825,939,671	0.004	1290
+	LinkStrand:	     33,554,432	 21,647,243,991	0.005	1290
+	LinkStrand:	     67,108,864	 43,289,852,631	0.005	1290
+	LinkStrand:	    134,217,728	 86,575,069,911	0.006	1290
+	LinkStrand:	    268,435,456	173,145,504,471	0.007	1290
+	LinkStrand:	    536,870,912	346,286,373,591	0.010	1290
+	LinkStrand:	  1,073,741,824	692,568,111,831	0.024	1290
+	
+	The time does not change for LinkStrand as the benchmark runs as the timing is no 
+	longer a function of the Splicee size. This is because the strand is no longer a 
+	String and therefore is no longer immutable. Making edits to the linked list object 
+	is easy and quick because it does not require creating a whole new string object. 
+	Appending new enzymes to the dna also is a quick process as it does not create a new 
+	object, but instead edits the .next pointer to point to the new strand that is being
+	added.
+
+
+
+
+
+
+

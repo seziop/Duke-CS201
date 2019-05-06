@@ -1,0 +1,152 @@
+This is the analysis for Markov Part 2, Spring 2019
+
+Include your name and net id here. Answer the questions from the assignment 
+that are reproduced below
+
+Shivansh S. Mehta (CS201-Duke Spring 2019)
+NetID: sm682
+
+(1) Determine (from running Benchmark.java) how long it takes for 
+BaseMarkov to generate 2,000, 4,000, 8,000, 16,000, and 32,000 
+random characters using the default file and an order 5 Markov Model. 
+Include these timings in your report. 
+The program also generates 4,096 characters using texts that increase in 
+size from 496,768 characters to 4,967,680 characters (10 times the number).  
+Do the timings support the O(NT) analysis for BaseMarkov?
+
+    BaseMarkov BenchMark Results
+
+    time	source	#chars
+    0.152	507914	1000
+    0.236	507914	2000
+    0.452	507914	4000
+    0.982	507914	8000
+    1.851	507914	16000
+    3.681	507914	32000
+    7.274	507914	64000
+
+    0.455	507914	4096
+    1.045	1015828	4096
+    2.241	1523742	4096
+    3.538	2031656	4096
+    4.381	2539570	4096
+    2.841	3047484	4096
+    3.131	3555398	4096
+    3.945	4063312	4096
+    7.515	4571226	4096
+    7.570	5079140	4096
+
+    The results support the claim that Base Markov results in O(NT).
+    As can be seen, when characters are increased, for example from
+    2000 to 4000, the timings also increase proportionally. Similarly,
+    when only 4096 characters are chosen, we see the timings increase
+    proportionally to the size of the source text.
+
+
+
+(2) Determine (from running Benchmark.java) how long it takes for 
+EfficientMarkov to generate 2,000, 4,000, 8,000, 16,000, and 32,000 
+random characters using the default file and an order 5 Markov Model. 
+Include these timings in your report. 
+The program also generates 4,096 characters using texts that increase in 
+size from 496,768 characters to 4,967,680 characters (10 times the number).  
+Do the timings support the O(N+T) analysis for EfficientMarkov?
+
+    EfficientMarkov Benchmark Results
+
+    time	source	#chars
+    0.150	507914	1000
+    0.120	507914	2000
+    0.085	507914	4000
+    0.104	507914	8000
+    0.103	507914	16000
+    0.126	507914	32000
+    0.112	507914	64000
+
+    0.091	507914	4096
+    0.191	1015828	4096
+    0.326	1523742	4096
+    0.442	2031656	4096
+    0.649	2539570	4096
+    0.653	3047484	4096
+    0.821	3555398	4096
+    1.022	4063312	4096
+    1.164	4571226	4096
+    1.382	5079140	4096
+
+    The results support the claim that Efficient Markov results in O(N+T).
+    As seen, when characters are increased, for example from 2000 to 4000
+    or even from 2000 to 64000, the increase does not directly correlate
+    to an increase in time. In the second case, since we are scanning
+    different texts by varying the size (N), we see an increase in time.
+    However this is not as drastic as BaseMarkov and seems to be rather
+    incremental than proportional, which supports the "N+T" part of
+    the claim.
+
+(3)The tests in the class Benchmark use an order-5 Markov Model. 
+Run tests that you think are appropriate to determine if the order of the 
+Markov Model has a significant impact on the running time for BaseMarkov. 
+Explain your reasoning.
+
+    To test the relation between the order and the running time for
+    Base Markov, let us consider experimenting with orders (5,10,15,20,25)
+    for character sizes (2000,4000,8000). The results are listed below:
+
+    Order = 5
+    time	source	#chars
+    0.227	507914	2000
+    0.476	507914	4000
+    0.933	507914	8000
+
+    Order = 10
+    time	source	#chars
+    0.186	507914	2000
+    0.419	507914	4000
+    0.874	507914	8000
+
+    Order = 15
+    time	source	#chars
+    0.206	507914	2000
+    0.399	507914	4000
+    0.852	507914	8000
+
+    Order = 20
+    time	source	#chars
+    0.221	507914	2000
+    0.420	507914	4000
+    0.920	507914	8000
+
+    Order = 25
+    time	source	#chars
+    0.232	507914	2000
+    0.420	507914	4000
+    1.445	507914	8000
+
+    So, there is a relatively small difference when experimenting
+    with increasing orders from 5 onwards. I wonder if this is different
+    below five? So, I tested orders 1,2 and 3 as well:
+
+    Order = 1
+    time	source	#chars
+    2.839	507914	2000
+    5.551	507914	4000
+    11.226	507914	8000
+
+    Order = 2
+    time	source	#chars
+    0.667	507914	2000
+    1.264	507914	4000
+    2.466	507914	8000
+
+    Order = 3
+    time	source	#chars
+    0.329	507914	2000
+    0.721	507914	4000
+    1.493	507914	8000
+
+    Hence, what I saw was a very big time difference amongst smaller
+    order magnitudes where the difference between order 1 and 3 was
+    much larger than order 5 and 25. This leads me to conclude
+    that while increasing the order in general causing a reduction in time
+    as it iterates over less characters when the order is larger. However,
+    the resultant increase in efficiency exponentially reduces with order.
